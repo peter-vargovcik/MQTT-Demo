@@ -29,7 +29,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements MqttCallback {
     public final static String TAG = "DebugMQTT";
 
-    private int selectedColor, servoPosition;
+    private int selectedColor, potValue;
     private boolean isRedChecked,isYellowChecked,isGreenChecked;
     private ToggleButton toggleRed,toggleYellow,toggleGreen;
     private SeekBar simpleSeekBar;
@@ -112,6 +112,27 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
         mqttConnect();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        try {
+            mqttClient.disconnect();
+            mqttClient = null;
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(mqttClient == null){
+            mqttConnect();
+        }
+    }
+
     private String generateClientID(){
 
         byte[] array = new byte[7]; // length is bounded by 7
@@ -190,6 +211,29 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         final String incomingMessage = new String(message.getPayload());
         Log.d(TAG,incomingMessage);
+
+        if(topic.equals("st_esp")){
+
+            try {
+                JSONObject jsonObject = new JSONObject(incomingMessage);
+
+//                int counterValue = jsonObject.getInt("counter");
+                potValue = jsonObject.getInt("pot");
+//                int servoValue = jsonObject.getInt("servo");
+//                boolean redLedValue = jsonObject.getBoolean("redLed");
+//                boolean yellowLedValue = jsonObject.getBoolean("yellowLed");
+//                boolean greenLedValue = jsonObject.getBoolean("greenLed");
+//                int rgb1Value = jsonObject.getInt("rgb1");
+//                int rgb2Value = jsonObject.getInt("rgb2");
+//                int rgb3Value = jsonObject.getInt("rgb3");
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
 //        tv.setText(incomingMessage);
 //        runOnUiThread(new Runnable() {
 //            public void run() {
