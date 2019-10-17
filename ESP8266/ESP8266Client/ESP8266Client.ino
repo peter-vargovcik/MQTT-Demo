@@ -148,9 +148,9 @@ void loop() {
   digitalWrite(yellowLedPin, yellowLed);
   digitalWrite(greenLedPin, greenLed);
 
-  analogWrite(rgbPin1, map(rgbPWM1,0,100,1024,0));
-  analogWrite(rgbPin2, map(rgbPWM2,0,100,1024,0));
-  analogWrite(rgbPin3, map(rgbPWM3,0,100,1024,0));
+  analogWrite(rgbPin1, map(rgbPWM1,0,255,1024,0));
+  analogWrite(rgbPin2, map(rgbPWM2,0,255,1024,0));
+  analogWrite(rgbPin3, map(rgbPWM3,0,255,1024,0));
 
   if (!client.connected()) {
     reconnect();
