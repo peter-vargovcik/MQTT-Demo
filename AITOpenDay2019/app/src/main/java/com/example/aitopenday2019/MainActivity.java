@@ -2,11 +2,15 @@ package com.example.aitopenday2019;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
@@ -33,12 +37,15 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
     private boolean isRedChecked,isYellowChecked,isGreenChecked;
     private ToggleButton toggleRed,toggleYellow,toggleGreen;
     private SeekBar simpleSeekBar;
+    private ImageView imageView;
+    private LinearLayout linearLayout;
 
     // https://www.eclipse.org/paho/clients/java/
     private String topic        = "test/message";
     private String content      = "Message from MqttPublishSample";
     private int qos             = 2;
     private String broker       = "tcp://192.168.4.1:1883";
+//    private String broker       = "tcp://192.168.1.18:1883";
     private String clientId;
     private MemoryPersistence persistence = new MemoryPersistence();
     private  MqttClient mqttClient;
@@ -107,6 +114,10 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
 
 
         simpleSeekBar=(SeekBar)findViewById(R.id.simpleSeekBar);
+        imageView = findViewById(R.id.logoLoading);
+        linearLayout = findViewById(R.id.linearLayoutView);
+
+
 
         //Seekbar
         mqttConnect();
@@ -227,6 +238,12 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
 //                int rgb2Value = jsonObject.getInt("rgb2");
 //                int rgb3Value = jsonObject.getInt("rgb3");
 
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        rotateLogo();
+                    }
+                });
 
 
             } catch (JSONException e) {
@@ -240,6 +257,32 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
 //                tv.setText(incomingMessage);
 //            }
 //        });
+    }
+
+    private void rotateLogo() {
+        Matrix matrix = new Matrix();
+        imageView.setScaleType(ImageView.ScaleType.MATRIX);   //required
+
+        float centreX=imageView.getX() + imageView.getWidth()  / 2;
+        float centreY=imageView.getY() + imageView.getHeight() / 2;
+        float angle = potValue  * 360 / 100;
+
+//        int parentWidth = linearLayout.getWidth();
+//        int currentWidth = imageView.getWidth();
+//        int currentHeight = imageView.getHeight();
+//        float scale = currentWidth/parentWidth;
+//
+//        int scaledHeight = (int)(currentHeight * scale);
+//
+//        imageView.setMaxWidth(parentWidth);
+//        imageView.setMaxHeight(scaledHeight);
+
+//        imageView.getLayoutParams().width= ViewGroup.LayoutParams.MATCH_PARENT;
+//        imageView.getLayoutParams().height= ViewGroup.LayoutParams.WRAP_CONTENT;
+//        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+        matrix.postRotate(angle,  centreX,centreY );
+        imageView.setImageMatrix(matrix);
     }
 
     @Override

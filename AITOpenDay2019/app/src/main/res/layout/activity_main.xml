@@ -26,6 +26,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
+            android:id="@+id/linearLayoutView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -43,7 +44,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="top"
-                android:src="@drawable/logo" />
+                android:src="@drawable/logo_1" />
 
             <LinearLayout
                 android:layout_width="match_parent"
